@@ -1,0 +1,25 @@
+# -*- coding: utf-8-unix -*-
+* WebAssistSidebar
+
+Webページ別に、便利な機能を提供するサイドバーを追加するUserScriptです。
+Tampermonkeyで利用可能です。
+
+** インストール
+
+1. Chromeの拡張機能[[https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=ja][Tampermonkey]]をインストールします。
+2. 必要なスクリプトをブラウザで開き、rawボタンをクリックします。以降はTampermonkeyのガイドにしたがってください。
+
+** 使用方法
+
+- スクリプトごとに設定されたWebページを開くと、右側にサイドバーを開くボタンが表示されます。
+- クリックで開き、必要な機能を利用します。
+- 利用しなければ、閉じるボタンによってサイドバーを隠すことができます。
+
+
+** 例
+
+*** ChatGPT Prompt Support
+
+** ライセンス
+このプロジェクトは MIT ライセンスの下で提供されています。
+各スクリプトの著作権表示はファイル冒頭の記載にしたがいます。

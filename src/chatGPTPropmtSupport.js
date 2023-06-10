@@ -36,7 +36,7 @@ const promptButtons = [
             },
             {
                 label: "概要",
-                prompt: "ロール：あなたは優秀な高校教師です。信頼性の高い情報を、高校生にもわかるようにわかりやすく伝えます。\n質問：{text}について、概要を教えてください。\n条件：400字以内",
+                prompt: "ロール：あなたは優秀な高校教師です。信頼性の高い情報を、高校生にもわかるようにわかりやすく伝えます。以下の言葉について概要を説明してください。\n{text}\n条件：400字以内",
             },
             {
                 label: "ステップバイステップ",
@@ -44,6 +44,7 @@ const promptButtons = [
 
         ]
     },
+
     {
         groupLabel: "コード生成",
         buttons: [
@@ -128,20 +129,21 @@ const addSideMenu = async function () {
         GetHTML() {
             return `<div class="menu-wrapper">
                       <div class="menu-header">
-                        <h4 class="sidemenu-txt">${this.title}<span class="glyphicon glyphicon-menu-up" style="float: right"></span></h4>
+                        <h4 class="sidemenu-txt">${this.title}<span class="glyphicon glyphicon-menu-up" style="float: right">▲</span></h4>
                       </div>
                       <div class="menu-box"><div class="menu-content" id="${this.id}">${this.document}</div></div>
                     </div>`;
         }
     }
     class PromptElement extends SideMenuElement {
-        constructor(id, title) {
+        constructor(obj, i) {
             super(...arguments);
-            this.id = id;
-            this.title = title;
+            this.config = obj;
+            this.id = `menubox-${i}`;
+            this.title = obj.groupLabel;
             this.buttons = this.getButtons();
             this.document = `
-<div id="propmt-alert"></div>
+<div class="propmt-alert"></div>
 <div class="row">
     <div class="input-group">
         <span class="input-group-addon"></span>
@@ -159,7 +161,7 @@ const addSideMenu = async function () {
 
         afterOpen() {
             return __awaiter(this, void 0, void 0, function* () {
-                for (const pb of promptButtons[this.id].buttons){
+                for (const pb of this.config.buttons){
                     document.getElementById(pb.label).addEventListener("click", () => {this.click(pb.prompt)});
                 }
             });
@@ -167,7 +169,7 @@ const addSideMenu = async function () {
 
         getButtons(){
             const buf = [];
-            for (const pb of promptButtons[this.id].buttons) {
+            for (const pb of this.config.buttons) {
                 buf.push(this.createButton(pb.label, pb.label));
             }
             return buf.join('\n');
@@ -198,7 +200,7 @@ const addSideMenu = async function () {
 
     const promptators = [];
     for (let i = 0; i < promptButtons.length; i++) {
-        promptators.push(new PromptElement(i, promptButtons[i].groupLabel));
+        promptators.push(new PromptElement(promptButtons[i], i));
     }
 
     var sidemenuHtml = `
@@ -291,6 +293,8 @@ const addSideMenu = async function () {
         Generate() {
             document.body.insertAdjacentHTML("afterbegin", sidemenuHtml);
             resizeSidemenuHeight();
+
+            // sidebar全体の折り畳みイベント
             const key = document.getElementById("sidemenu-key");
             const wrap = document.getElementById("menu-wrap");
             key.addEventListener("click", () => {
@@ -302,6 +306,7 @@ const addSideMenu = async function () {
                 wrap.classList.toggle("sidemenu-active");
             });
             window.addEventListener("onresize", resizeSidemenuHeight);
+            // sidebar内の折り畳み
             document.getElementById("sidemenu").addEventListener("click", (event) => {
                 const target = event.target;
                 const header = target.closest(".menu-header");
@@ -309,8 +314,7 @@ const addSideMenu = async function () {
                 const box = target.closest(".menu-wrapper").querySelector(".menu-box");
                 box.classList.toggle("menu-box-collapse");
                 const arrow = target.querySelector(".glyphicon");
-                arrow.classList.toggle("glyphicon-menu-down");
-                arrow.classList.toggle("glyphicon-menu-up");
+                arrow.textContent = arrow.textContent == "▼" ? "▲" : "▼";
             });
             function resizeSidemenuHeight() {
                 document.getElementById("sidemenu").style.height = `${window.innerHeight}px`;
@@ -320,7 +324,10 @@ const addSideMenu = async function () {
             if (!element.shouldDisplayed(document.location.href)) return;
             const sidemenu = document.getElementById("sidemenu");
             sidemenu.insertAdjacentHTML("beforeend", element.GetHTML());
-            const content = sidemenu.querySelector(".menu-content");
+            console.log(sidemenu);
+            console.log(document.getElementById(element.id));
+            const content = document.getElementById(element.id);
+            console.log(content);
             content.parentElement.style.height = `${content.offsetHeight}px`;
             element.afterAppend();
             this.pendingElements.push(element);

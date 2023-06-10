@@ -3,14 +3,14 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0.0
 // @description  add sidebar for supporting to input prompt for ChatGPT.
-// @author       daishijtt3
+// @author       dsjt
 // @license      MIT
 // @match        https://chat.openai.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
 /*!
-  Copyright (c) 2023 daishijtt3
+  Copyright (c) 2023 dsjt
   Copyright (c) 2018 keymoon
   Copyright (c) Microsoft Corporation.
 
